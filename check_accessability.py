@@ -1,12 +1,13 @@
 import argparse
 import sys
 
+from result_writer import ResultWriter
 from url_reader import UrlReader
 
 
 class CheckAccessability(object):
     def __init__(self, args):
-        self.in_file, self.out_file = self._getFiles(args)
+        in_file, out_file = self._getFiles(args)
         self.url_reader = UrlReader(in_file)
         self.result_writer = ResultWriter(out_file)
         # need to do something here to read in the rule
@@ -20,7 +21,8 @@ class CheckAccessability(object):
 
     def run(self):
         for url in self.url_reader.get_url():
-            # beautiful soup stuff here
+            print(url)
+
 
 if __name__ == "__main__":
     parser = CheckAccessability(sys.argv)
