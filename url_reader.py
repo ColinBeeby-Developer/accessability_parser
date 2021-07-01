@@ -3,7 +3,7 @@ class UrlReader(object):
         self.in_file = in_file
 
     def get_url(self):
-        with open(self.in_file, 'r') as in_file:
+        with open(self.in_file, "r") as in_file:
             for line in in_file:
-                yield line
-        
+                print("Processing {}".format(line))
+                yield line.rstrip("\n")

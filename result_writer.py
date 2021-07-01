@@ -9,4 +9,4 @@ class ResultWriter(object):
     def output_results(self):
         with open(self.out_file, "w") as out_file:
             for result in self.results:
-                out_file.write(result)
+                out_file.write("{}\n".format(result))
