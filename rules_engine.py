@@ -1,7 +1,9 @@
 import json
+import re
 
 import requests
 from bs4 import BeautifulSoup
+from requests.sessions import TooManyRedirects
 
 
 class RulesEngine(object):
@@ -21,7 +23,11 @@ class RulesEngine(object):
     def check_url(self, url):
         result = False
         matching_rule = None
-        html = requests.get(url)
+        try:
+            html = requests.get(url)
+        except TooManyRedirects:
+            print("Too many redirects detected for {} - skipping".format(url))
+            return result, matching_rule
         soup = BeautifulSoup(html.text, "lxml").body
         page_elements = [e for e in soup.descendants if e.name is not None]
         for rule in self.accessability_rules:
@@ -45,14 +51,14 @@ class RulesEngine(object):
     ):
         elements_checked = 0
         clause_descriptor = rule_clauses[rule_clause_index]["descriptor"]
-        clause_exit = rule_clauses[rule_clause_index].get("exit_clause")
+        clause_exit = rule_clauses[rule_clause_index].get("clause_exit")
         for page_element in page_elements[page_element_index:]:
             page_element_descriptor = "{} {}".format(
                 page_element.name, page_element.attrs
             )
-            if page_element_descriptor == clause_exit:
+            if clause_exit and re.match(clause_exit, page_element_descriptor):
                 return self.EXIT
-            if page_element_descriptor == clause_descriptor:
+            if re.match(clause_descriptor, page_element_descriptor):
                 if len(rule_clauses) - 1 == rule_clause_index:
                     return self.FOUND
                 else:
