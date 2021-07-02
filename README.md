@@ -61,6 +61,10 @@ Here is an example rules file:
 The above example contains two rules. The first rule "important_callouts" has two clauses. When this rule is applied the first clause will be checked by scanning down the html of the current url, looking for the descriptor. The descriptor gives the tag which is being searched for and the attributes which that tag must possess. The clause_exit specifies a tag at which, if found, searching should stop and a negative result returned. Then a search for the second clause will be searched for, starting at the point in the file where the first clause found a match.
 
 ## Running The Parser
+Before running the parser you should first activate the virtual environment:
+
+    pipenv shell
+
 Now that you have generated the file containing the urls to parse and a file containing the rules to use, you can now run the parser.
 
     python check_accessability.py urls_file output_file rules_file
